@@ -35,7 +35,8 @@ FetchContent_Declare(
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 FetchContent_MakeAvailable(googletest)
 
-add_library(${MODULE_NAME} SHARED ${SRC_FILES})
+if(SRC_FILES)
+    add_library(${MODULE_NAME} SHARED ${SRC_FILES})
 
 set_target_properties(${MODULE_NAME} PROPERTIES
         CXX_STANDARD 14
@@ -84,3 +85,4 @@ target_link_libraries(${MODULE_NAME} PRIVATE ${GSTREAMER_LIBRARIES})
 target_link_libraries(${MODULE_NAME} PRIVATE ${GSTREAMERBASE_LIBRARIES})
 
 install(TARGETS ${MODULE_NAME} DESTINATION lib)
+endif()

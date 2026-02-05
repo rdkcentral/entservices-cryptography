@@ -25,14 +25,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(${NAMESPACE}Plugins REQUIRED)
 
 set (TEST_SRC
-    tests/test_UtilsFile.cpp
 )
 
 set (TEST_LIB
     ${NAMESPACE}Plugins::${NAMESPACE}Plugins
 )
 
-set (TEST_INC ../../helpers)
+set (TEST_INC)
 
 #########################################################################################
 # add_plugin_test_ex: Macro to add plugin tests, it will append to TEST_SRC, TEST_INC,
@@ -101,9 +100,10 @@ macro(add_plugin_test plugin_name test_files)
     add_plugin_test_ex(${plugin_opt} "${test_files}" "../../${plugin_name}" "${NAMESPACE}${plugin_name}")
 endmacro()
 
-add_library(${MODULE_NAME} SHARED ${TEST_SRC})
+if(TEST_SRC)
+    add_library(${MODULE_NAME} SHARED ${TEST_SRC})
 
-include_directories(${TEST_INC})
+    include_directories(${TEST_INC})
 
 target_link_directories(${MODULE_NAME} PUBLIC ${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/lib/wpeframework/plugins)
 
@@ -119,7 +119,8 @@ target_include_directories(${MODULE_NAME}
         ${CMAKE_SOURCE_DIR}/../Thunder/Source/plugins
         )
 
-install(TARGETS ${MODULE_NAME} DESTINATION lib)
-write_config(PLUGINS ${PLUGIN_NAME})
+    install(TARGETS ${MODULE_NAME} DESTINATION lib)
+    write_config(PLUGINS ${PLUGIN_NAME})
+endif()
 
 
