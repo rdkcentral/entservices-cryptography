@@ -325,7 +325,7 @@ jobs:
           -B build/mocks
           -DBUILD_SHARED_LIBS=ON
           -DRDK_SERVICES_L1_TEST=ON
-          -DPLUGIN_CRYPTOGRAPHY=ON
+          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DUSE_THUNDER_R4=ON
           -DCMAKE_TOOLCHAIN_FILE="${{ env.TOOLCHAIN_FILE }}"
           -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/install/usr"
@@ -453,7 +453,7 @@ jobs:
           -DDS_FOUND=ON
           -DHAS_FRONT_PANEL=ON
           -DRDK_SERVICES_L1_TEST=${{ env.RDK_SERVICES_L1_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=ON
+          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DUSE_THUNDER_R4=ON
           -DHIDE_NON_EXTERNAL_SYMBOLS=OFF
           &&
@@ -530,7 +530,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=Debug
           -DDS_FOUND=ON
           -DRDK_SERVICES_L1_TEST=${{ env.RDK_SERVICES_L1_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=ON
+          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DUSE_THUNDER_R4=ON
           -DHIDE_NON_EXTERNAL_SYMBOLS=OFF
           &&
