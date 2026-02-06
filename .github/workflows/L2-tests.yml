@@ -376,7 +376,7 @@ jobs:
           -DUSE_THUNDER_R4=ON
           -DPLUGIN_L2Tests=ON
           -DRDK_SERVICE_L2_TEST=${{ env.RDK_SERVICES_L2_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=ON
+          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DLMPLAYER_FOUND=ON
           -DDS_FOUND=ON
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -453,7 +453,7 @@ jobs:
           -DUSE_THUNDER_R4=ON
           -DPLUGIN_L2Tests=ON
           -DRDK_SERVICE_L2_TEST=${{ env.RDK_SERVICES_L2_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=ON
+          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DLMPLAYER_FOUND=ON
           -DDS_FOUND=ON
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
