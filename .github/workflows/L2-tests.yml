@@ -74,7 +74,6 @@ jobs:
              gstreamer1.0-plugins-ugly \
              gstreamer1.0-libav
 
-
       - name: Build trevor-base64
         run: |
             if [ ! -d "trower-base64" ]; then
