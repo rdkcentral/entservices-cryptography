@@ -19,11 +19,23 @@
 # features
 #
 
-add_definitions (-DUSE_DS)
+add_definitions (-DUSE_SOUND_PLAYER)
+
+add_definitions (-DUSE_IARM)
+option(USE_IARM "USE_IARM" ON)
+
+add_definitions (-DUSE_IARM_BUS)
+option(USE_IARM_BUS "USE_IARM_BUS" ON)
+
+add_definitions (-DUSE_IARMBUS)
+
+add_definitions (-DUSE_TR_69)
 
 add_definitions (-DHAS_API_SYSTEM)
 add_definitions (-DHAS_API_POWERSTATE)
 add_definitions(-DRDK_LOG_MILESTONE)
+
+add_definitions (-DUSE_DS)
 
 option(PLUGIN_TELEMETRY "PLUGIN_TELEMETRY" ON)
 option(PLUGIN_CONTINUEWATCHING "PLUGIN_CONTINUEWATCHING" ON)
@@ -34,9 +46,50 @@ if(PLUGIN_CONTINUEWATCHING)
     endif()
 endif()
 
+if(DISABLE_GEOGRAPHY_TIMEZONE)
+    add_definitions(-DDISABLE_GEOGRAPHY_TIMEZONE)
+endif()
+
+if(BUILD_ENABLE_SYSTIMEMGR_SUPPORT)
+    message("Building with SYSTIMEMGR_SUPPORT enabled")
+    add_definitions(-DENABLE_SYSTIMEMGR_SUPPORT)
+endif()
+
+if(BUILD_DBUS)
+    message("Building for DBUS")
+    add_definitions(-DBUILD_DBUS)
+    add_definitions(-DIARM_USE_DBUS)
+    option(BUILD_DBUS "BUILD_DBUS" ON)
+    option(IARM_USE_DBUS "IARM_USE_DBUS" ON)
+endif()
+
+if(BUILD_ENABLE_THERMAL_PROTECTION)
+    add_definitions(-DBUILD_ENABLE_THERMAL_PROTECTION)
+    add_definitions(-DENABLE_THERMAL_PROTECTION)
+endif()
+
+if(BUILD_ENABLE_DEVICE_MANUFACTURER_INFO)
+    message("Building with device manufacturer info")
+    add_definitions(-DENABLE_DEVICE_MANUFACTURER_INFO)
+endif()
+
+if(SUPPRESS_MAINTENANCE)
+    message("Enable SUPPRESS_MAINTENANCE")
+    add_definitions(-DSUPPRESS_MAINTENANCE)
+endif()
+
 if(BUILD_ENABLE_CLOCK)
     message("Building with clock support")
     add_definitions(-DCLOCK_BRIGHTNESS_ENABLED)
+endif()
+
+if(BUILD_ENABLE_EXTENDED_ALL_SEGMENTS_TEXT_PATTERN)
+    add_definitions(-DUSE_EXTENDED_ALL_SEGMENTS_TEXT_PATTERN)
+endif()
+
+if(ENABLE_SYSTEM_GET_STORE_DEMO_LINK)
+    message("Building with System Service getStoreDemoLink")
+    add_definitions(-DENABLE_SYSTEM_GET_STORE_DEMO_LINK)
 endif()
 
 if(BUILD_ENABLE_TELEMETRY_LOGGING)
@@ -44,7 +97,36 @@ if(BUILD_ENABLE_TELEMETRY_LOGGING)
     add_definitions(-DENABLE_TELEMETRY_LOGGING)
 endif()
 
+if(BUILD_ENABLE_LINK_LOCALTIME)
+    message("Building with link localtime")
+    add_definitions(-DENABLE_LINK_LOCALTIME)
+endif()
+
+add_definitions(-DENABLE_DEEP_SLEEP)
+
+if(BUILD_ENABLE_APP_CONTROL_AUDIOPORT_INIT)
+    add_definitions(-DAPP_CONTROL_AUDIOPORT_INIT)
+endif()
+
+if(NET_DISABLE_NETSRVMGR_CHECK)
+    add_definitions(-DNET_DISABLE_NETSRVMGR_CHECK)
+endif()
+
+if(ENABLE_WHOAMI)
+    message("Enable WHOAMI")
+    add_definitions(-DENABLE_WHOAMI=ON)
+endif()
+
 if(ENABLE_RFC_MANAGER)
     message("Using binary for RFC Maintenance task")
     add_definitions(-DENABLE_RFC_MANAGER=ON)
+endif()
+
+if(DISABLE_DCM_TASK)
+    message("Disabling DCM Maintenance task")
+    add_definitions(-DDISABLE_DCM_TASK=ON)
+endif()
+
+if(BUILD_ENABLE_ERM)
+    add_definitions(-DENABLE_ERM)
 endif()
