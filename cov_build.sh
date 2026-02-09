@@ -24,7 +24,6 @@ cmake -G Ninja -S "$GITHUB_WORKSPACE" -B build/entservices-cryptography \
 -DRDK_SERVICES_COVERITY=ON \
 -DRDK_SERVICES_L1_TEST=ON \
 -DDS_FOUND=ON \
--DPLUGIN_CRYPTOGRAPHY=OFF \
 -DHAS_FRONT_PANEL=ON \
 -DHIDE_NON_EXTERNAL_SYMBOLS=OFF \
 -DCMAKE_CXX_FLAGS="-DEXCEPTIONS_ENABLE=ON \
@@ -56,7 +55,6 @@ cmake -G Ninja -S "$GITHUB_WORKSPACE" -B build/entservices-cryptography \
 -DENABLE_TELEMETRY_LOGGING -DUSE_IARMBUS -DHAS_API_SYSTEM \
 -DHAS_RBUS -DDISABLE_SECURITY_TOKEN -DENABLE_DEVICE_MANUFACTURER_INFO -DUSE_THUNDER_R4 -DTHUNDER_VERSION=4 -DTHUNDER_VERSION_MAJOR=4 -DTHUNDER_VERSION_MINOR=4" \
 
-cmake --build build/entservices-cryptography
-cmake --install build/entservices-cryptography
+cmake --build build/entservices-cryptography --target install
 echo "======================================================================================"
 exit 0

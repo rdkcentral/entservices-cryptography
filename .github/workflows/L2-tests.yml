@@ -264,7 +264,7 @@ jobs:
           rdk/ds/VideoDFC.hpp
           dsRpc.h
           &&
-          cp -r /usr/include/gstreamer-1.0/gst /usr/include/glib-2.0/* /usr/lib/x86_64-linux-gnu/glib-2.0/include/* /usr/local/include/trower-base64/base64.h /usr/include/libdrm/drm.h /usr/include/libdrm/drm_mode.h /usr/include/xf86drm.h .
+          cp -r /usr/local/include/trower-base64/base64.h /usr/include/libdrm/drm.h /usr/include/libdrm/drm_mode.h /usr/include/xf86drm.h .
 
       - name: Set clang toolchain
         if: ${{ matrix.compiler == 'clang' }}
@@ -376,7 +376,6 @@ jobs:
           -DUSE_THUNDER_R4=ON
           -DPLUGIN_L2Tests=ON
           -DRDK_SERVICE_L2_TEST=${{ env.RDK_SERVICES_L2_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DLMPLAYER_FOUND=ON
           -DDS_FOUND=ON
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -453,7 +452,6 @@ jobs:
           -DUSE_THUNDER_R4=ON
           -DPLUGIN_L2Tests=ON
           -DRDK_SERVICE_L2_TEST=${{ env.RDK_SERVICES_L2_TEST }}
-          -DPLUGIN_CRYPTOGRAPHY=OFF
           -DLMPLAYER_FOUND=ON
           -DDS_FOUND=ON
           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
@@ -576,7 +574,7 @@ jobs:
           rm -rf $(pwd)/rdkL2TestResults.json
 
       - name: Run unit tests with valgrind
-        if: ${{ env.RDK_SERVICES_L2_TEST == 'ON' }}
+        if: ${{ !env.ACT && env.RDK_SERVICES_L2_TEST == 'ON' }}
         run: >
           PATH=$GITHUB_WORKSPACE/install/usr/bin:${PATH}
           LD_LIBRARY_PATH=$GITHUB_WORKSPACE/install/usr/lib:$GITHUB_WORKSPACE/install/usr/lib/wpeframework/plugins:${LD_LIBRARY_PATH}
@@ -592,7 +590,7 @@ jobs:
           rm -rf $(pwd)/rdkL2TestResults.json
 
       - name: Generate coverage
-        if: ${{ matrix.coverage == 'with-coverage' && env.RDK_SERVICES_L2_TEST == 'ON' }}
+        if: ${{ matrix.coverage == 'with-coverage' && !env.ACT && env.RDK_SERVICES_L2_TEST == 'ON' }}
         run: >
           cp $GITHUB_WORKSPACE/entservices-testframework/Tests/L2Tests/.lcovrc_l2 ~/.lcovrc
           &&
