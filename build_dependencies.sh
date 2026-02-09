@@ -94,4 +94,30 @@ cmake -G Ninja -S entservices-apis  -B build/entservices-apis \
 
 cmake --build build/entservices-apis --target install
 
+############################
+# generating extrnal headers
+cd $GITHUB_WORKSPACE
+cd entservices-testframework/Tests
+echo " Empty mocks creation to avoid compilation errors"
+echo "======================================================================================"
+mkdir -p headers/rdk/iarmbus
+mkdir -p headers/rdk/iarmmgrs-hal
+mkdir -p headers/proc
+echo "dir created successfully"
+echo "======================================================================================"
+
+echo "======================================================================================"
+echo "empty headers creation"
+cd headers
+touch rdk/iarmbus/libIARM.h
+touch rdk/iarmbus/libIBus.h
+touch rdk/iarmbus/libIBusDaemon.h
+touch rdk/iarmmgrs-hal/sysMgr.h
+echo "files created successfully"
+echo "======================================================================================"
+
+
+cd ../../
+cp -r /usr/include/gstreamer-1.0/gst /usr/include/glib-2.0/* /usr/lib/x86_64-linux-gnu/glib-2.0/include/* /usr/local/include/trower-base64/base64.h .
+
 ls -la ${GITHUB_WORKSPACE}
