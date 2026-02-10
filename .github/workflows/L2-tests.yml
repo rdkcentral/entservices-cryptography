@@ -617,7 +617,7 @@ jobs:
           filtered_coverage.info
 
       - name: Upload artifacts
-        if: ${{ env.RDK_SERVICES_L2_TEST == 'ON' }}
+        if: ${{ !env.ACT && env.RDK_SERVICES_L2_TEST == 'ON' }}
         uses: actions/upload-artifact@v4
         with:
           name: artifacts-L2-cryptography
