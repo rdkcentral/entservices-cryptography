@@ -77,6 +77,14 @@ cmake -G Ninja -S Thunder -B build/Thunder \
 
 cmake --build build/Thunder --target install
 
+#############################
+# Build Thunder Client Libraries
+git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderClientLibraries.git
+cmake -G Ninja -S ThunderClientLibraries -B build/ThunderClientLibraries \
+    -DCRYPTOGRAPHY=ON \
+    -DCRYPTOGRAPHY_IMPLEMENTATION="OpenSSL" \
+    -DCMAKE_INSTALL_PREFIX="$THUNDER_INSTALL_DIR"
+cmake --build build/ThunderClientLibraries --target install
 
 ############################
 # Build entservices-apis
