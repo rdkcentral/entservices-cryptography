@@ -13,17 +13,6 @@ apt update
 apt install -y libcurl4-openssl-dev valgrind lcov clang libsystemd-dev libboost-all-dev libwebsocketpp-dev meson curl libunwind-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 pip install jsonref
 
-##############################
-# Build trower-base64
-##############################
-if [ ! -d "trower-base64" ]; then
-git clone https://github.com/xmidt-org/trower-base64.git
-fi
-cd trower-base64
-meson setup --warnlevel 3 --werror build
-ninja -C build
-ninja -C build install
-cd ..
 ###########################################
 # Clone the required repositories
 
