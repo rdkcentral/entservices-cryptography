@@ -31,6 +31,8 @@ git clone --branch  R4.4.3 https://github.com/rdkcentral/ThunderTools.git
 
 git clone --branch R4.4.1 https://github.com/rdkcentral/Thunder.git
 
+git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderInterfaces.git
+
 git clone --branch main https://github.com/rdkcentral/entservices-apis.git
 
 git clone https://$GITHUB_TOKEN@github.com/rdkcentral/entservices-testframework.git
@@ -76,6 +78,17 @@ cmake -G Ninja -S Thunder -B build/Thunder \
     -DEXCEPTIONS_ENABLE=ON \
 
 cmake --build build/Thunder --target install
+
+############################
+# Build ThunderInterfaces
+echo "======================================================================================"
+echo "building ThunderInterfaces"
+
+cmake -G Ninja -S ThunderInterfaces -B build/ThunderInterfaces \
+    -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/install/usr" \
+    -DCMAKE_MODULE_PATH="$GITHUB_WORKSPACE/install/tools/cmake" \
+    -DCMAKE_PREFIX_PATH="$GITHUB_WORKSPACE/install/usr"
+cmake --build build/ThunderInterfaces --target install
 
 #############################
 # Build Thunder Client Libraries
