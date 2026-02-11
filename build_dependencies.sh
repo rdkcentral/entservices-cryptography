@@ -83,7 +83,9 @@ git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderClientLibraries.g
 cmake -G Ninja -S ThunderClientLibraries -B build/ThunderClientLibraries \
     -DCRYPTOGRAPHY=ON \
     -DCRYPTOGRAPHY_IMPLEMENTATION="OpenSSL" \
-    -DCMAKE_INSTALL_PREFIX="$THUNDER_INSTALL_DIR"
+    -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/install/usr" \
+    -DCMAKE_MODULE_PATH="$GITHUB_WORKSPACE/install/tools/cmake" \
+    -DCMAKE_PREFIX_PATH="$GITHUB_WORKSPACE/install/usr"
 cmake --build build/ThunderClientLibraries --target install
 
 ############################
