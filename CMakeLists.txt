@@ -16,10 +16,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ###
+project(entservices-cryptography)
 
 cmake_minimum_required(VERSION 3.3)
-
-project(entservices-cryptography)
 
 find_package(WPEFramework)
 
