@@ -41,8 +41,6 @@ find_package(${NAMESPACE}Definitions REQUIRED)
 find_package(CompileSettingsDebug CONFIG REQUIRED)
 find_package(${NAMESPACE}Cryptography CONFIG REQUIRED)
 
-find_package(${NAMESPACE}Definitions REQUIRED)
-
 add_library(${MODULE_NAME} SHARED
     Module.cpp
     CryptographyExtAccess.cpp

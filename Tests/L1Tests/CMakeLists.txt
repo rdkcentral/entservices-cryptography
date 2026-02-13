@@ -25,14 +25,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(${NAMESPACE}Plugins REQUIRED)
 
 set (TEST_SRC
-    tests/test_UtilsFile.cpp
 )
 
 set (TEST_LIB
     ${NAMESPACE}Plugins::${NAMESPACE}Plugins
 )
 
-set (TEST_INC ../../helpers)
+set (TEST_INC)
 
 #########################################################################################
 # add_plugin_test_ex: Macro to add plugin tests, it will append to TEST_SRC, TEST_INC,
@@ -101,31 +100,10 @@ macro(add_plugin_test plugin_name test_files)
     add_plugin_test_ex(${plugin_opt} "${test_files}" "../../${plugin_name}" "${NAMESPACE}${plugin_name}")
 endmacro()
 
-# PLUGIN_SCREENCAPTURE
-set (SCREENCAPTURE_INC ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/ScreenCapture ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/helpers)
-set (SCREENCAPTURE_LIBS ${NAMESPACE}ScreenCapture ${NAMESPACE}ScreenCaptureImplementation)
-add_plugin_test_ex(PLUGIN_SCREENCAPTURE tests/test_ScreenCapture.cpp "${SCREENCAPTURE_INC}" "${SCREENCAPTURE_LIBS}")
+if(TEST_SRC)
+    add_library(${MODULE_NAME} SHARED ${TEST_SRC})
 
-# PLUGIN_PLAYERINFO
-set (PLAYERINFO_INC ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/PlayerInfo ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/helpers)
-add_plugin_test_ex(PLUGIN_PLAYERINFO tests/test_PlayerInfo.cpp "${PLAYERINFO_INC}" "${NAMESPACE}PlayerInfo")
-
-# PLUGIN_LINEARPLAYBACKCONTROL
-set (LINEARPLAYBACKCONTROL_INC ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/LinearPlaybackControl ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/helpers)
-add_plugin_test_ex(PLUGIN_LINEARPLAYBACKCONTROL tests/test_LinearPlaybackControl.cpp "${LINEARPLAYBACKCONTROL_INC}" "${NAMESPACE}LinearPlaybackControl")
-
-# PLUGIN_UNIFIEDCASMANAGEMENT
-set (UNIFIEDCASMANAGEMENT_INC ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/UnifiedCASManagement ${CMAKE_SOURCE_DIR}/../entservices-mediaanddrm/helpers)
-add_plugin_test_ex(PLUGIN_UNIFIEDCASMANAGEMENT tests/test_UnifiedCASManagement.cpp "${UNIFIEDCASMANAGEMENT_INC}" "${NAMESPACE}UnifiedCASManagement")
-
-# PLUGIN_SYSTEMAUDIOPLAYER
-add_plugin_test(SystemAudioPlayer tests/test_SystemAudioPlayer.cpp)
-
-# PLUGIN_TEXTTOSPEECH
-add_plugin_test(TextToSpeech tests/test_TextToSpeech.cpp)
-add_library(${MODULE_NAME} SHARED ${TEST_SRC})
-
-include_directories(${TEST_INC})
+    include_directories(${TEST_INC})
 
 target_link_directories(${MODULE_NAME} PUBLIC ${CMAKE_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/lib/wpeframework/plugins)
 
@@ -141,7 +119,8 @@ target_include_directories(${MODULE_NAME}
         ${CMAKE_SOURCE_DIR}/../Thunder/Source/plugins
         )
 
-install(TARGETS ${MODULE_NAME} DESTINATION lib)
-write_config(${PLUGIN_NAME})
+    install(TARGETS ${MODULE_NAME} DESTINATION lib)
+    write_config(PLUGINS ${PLUGIN_NAME})
+endif()
 
 
