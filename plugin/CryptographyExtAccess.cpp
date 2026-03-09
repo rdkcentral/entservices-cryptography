@@ -62,6 +62,7 @@ namespace Plugin {
         return message;
     }
 
+
     void CryptographyExtAccess::Deinitialize(PluginHost::IShell* service)  /* override */
     {
         if (_service != nullptr) {
