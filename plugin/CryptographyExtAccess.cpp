@@ -56,6 +56,7 @@ namespace Plugin {
             message = _T("CryptographyExtAccess could not be instantiated.");
         } else {
             printf("CryptographyExtAccess - Connection Id - %u\n",_connectionId);
+            printf("Test coverity workflow ,%s");
             _implementation->Configure(_service);
         }
 
