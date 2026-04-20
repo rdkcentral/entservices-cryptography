@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+
 #include "CryptographyExtAccess.h"
 
 namespace WPEFramework {
@@ -61,6 +62,7 @@ namespace Plugin {
 
         return message;
     }
+
 
     void CryptographyExtAccess::Deinitialize(PluginHost::IShell* service)  /* override */
     {
