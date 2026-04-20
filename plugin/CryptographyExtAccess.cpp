@@ -72,7 +72,7 @@ namespace Plugin {
             if (_implementation != nullptr) {
 
                 RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
-                printf("CryptographyExtAccess - Remote Connection  - %p\n",connection);
+                printf("CryptographyExtAccess - Remote Connection  - %p\n");
 
                 VARIABLE_IS_NOT_USED uint32_t result = _implementation->Release();
                 _implementation = nullptr;
