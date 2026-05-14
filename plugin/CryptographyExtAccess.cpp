@@ -20,6 +20,10 @@
 #include "CryptographyExtAccess.h"
 #include "UtilsLogging.h"
 
+extern "C" {
+    void vault_processor_release(void);
+}
+
 namespace WPEFramework {
 namespace Plugin {
 
@@ -179,6 +183,7 @@ namespace Plugin {
             std::lock_guard<std::mutex> lock(_implMutex);
             if (!_inDeepSleep) {
                 LOGINFO("Releasing SecAPI handle before deep sleep");
+                vault_processor_release();
                 destroyImplementation();
                 _inDeepSleep = true;
             }
