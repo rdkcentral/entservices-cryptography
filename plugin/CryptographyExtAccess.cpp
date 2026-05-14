@@ -18,6 +18,7 @@
  */
 
 #include "CryptographyExtAccess.h"
+#include "UtilsLogging.h"
 
 namespace WPEFramework {
 namespace Plugin {
@@ -37,7 +38,7 @@ namespace Plugin {
     }
 
 
-    const string CryptographyExtAccess::Initialize(PluginHost::IShell* service) /* override */ 
+    const string CryptographyExtAccess::Initialize(PluginHost::IShell* service) /* override */
     {
         string message;
 
@@ -50,13 +51,12 @@ namespace Plugin {
         _service->AddRef();
 
         _service->Register(&_notification);
-        _implementation = _service->Root<Exchange::IConfiguration>(_connectionId, Core::infinite, _T("CryptographyImplementation"));
 
-        if (_implementation == nullptr) {
+        if (!createImplementation()) {
             message = _T("CryptographyExtAccess could not be instantiated.");
         } else {
-            printf("CryptographyExtAccess - Connection Id - %u\n",_connectionId);
-            _implementation->Configure(_service);
+            InitializePowerManager();
+            registerPowerEventHandlers();
         }
 
         return message;
@@ -67,24 +67,12 @@ namespace Plugin {
         if (_service != nullptr) {
             ASSERT(_service == service);
 
+            unregisterPowerEventHandlers();
+            DeinitializePowerManager();
+
             _service->Unregister(&_notification);
 
-            if (_implementation != nullptr) {
-
-                RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
-                printf("CryptographyExtAccess - Remote Connection  - %p\n",connection);
-
-                VARIABLE_IS_NOT_USED uint32_t result = _implementation->Release();
-                _implementation = nullptr;
-                ASSERT(result == Core::ERROR_DESTRUCTION_SUCCEEDED);
-
-                if (connection != nullptr) {
-                    TRACE(Trace::Error, (_T("CryptographyExtAccess is not properly destructed. %d"), _connectionId));
-
-                    connection->Terminate();
-                    connection->Release();
-                }
-            }
+            destroyImplementation();
 
             _connectionId = 0;
             _service->Release();
@@ -107,6 +95,102 @@ namespace Plugin {
             Core::IWorkerPool::Instance().Submit(PluginHost::IShell::Job::Create(_service,
                 PluginHost::IShell::DEACTIVATED,
                 PluginHost::IShell::FAILURE));
+        }
+    }
+
+    bool CryptographyExtAccess::createImplementation()
+    {
+        ASSERT(_service != nullptr);
+        ASSERT(_implementation == nullptr);
+
+        _implementation = _service->Root<Exchange::IConfiguration>(_connectionId, Core::infinite, _T("CryptographyImplementation"));
+        if (_implementation == nullptr) {
+            LOGERR("CryptographyExtAccess could not instantiate CryptographyImplementation");
+            return false;
+        }
+
+        LOGINFO("CryptographyExtAccess - Connection Id - %u", _connectionId);
+        _implementation->Configure(_service);
+        return true;
+    }
+
+    void CryptographyExtAccess::destroyImplementation()
+    {
+        if (_implementation != nullptr) {
+
+            RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
+            LOGINFO("CryptographyExtAccess - Remote Connection - %p", connection);
+
+            VARIABLE_IS_NOT_USED uint32_t result = _implementation->Release();
+            _implementation = nullptr;
+            ASSERT(result == Core::ERROR_DESTRUCTION_SUCCEEDED);
+
+            if (connection != nullptr) {
+                TRACE(Trace::Error, (_T("CryptographyExtAccess is not properly destructed. %d"), _connectionId));
+
+                connection->Terminate();
+                connection->Release();
+            }
+        }
+    }
+
+    void CryptographyExtAccess::InitializePowerManager()
+    {
+        LOGINFO("InitializePowerManager CryptographyExtAccess");
+        _powerManagerPlugin = PowerManagerInterfaceBuilder(_T("org.rdk.PowerManager"))
+            .withIShell(_service)
+            .createInterface();
+    }
+
+    void CryptographyExtAccess::DeinitializePowerManager()
+    {
+        LOGINFO("DeinitializePowerManager CryptographyExtAccess");
+        if (_powerManagerPlugin) {
+            _powerManagerPlugin.Reset();
+        }
+    }
+
+    void CryptographyExtAccess::registerPowerEventHandlers()
+    {
+        ASSERT(_powerManagerPlugin);
+        if (!_registeredPowerEventHandlers && _powerManagerPlugin) {
+            _registeredPowerEventHandlers = true;
+            _powerManagerPlugin->Register(_pwrMgrNotification.baseInterface<Exchange::IPowerManager::IModeChangedNotification>());
+            LOGINFO("CryptographyExtAccess registered PowerManager mode change handler");
+        } else {
+            LOGWARN("CryptographyExtAccess registerPowerEventHandlers failed");
+        }
+    }
+
+    void CryptographyExtAccess::unregisterPowerEventHandlers()
+    {
+        if (_registeredPowerEventHandlers && _powerManagerPlugin) {
+            _registeredPowerEventHandlers = false;
+            _powerManagerPlugin->Unregister(_pwrMgrNotification.baseInterface<Exchange::IPowerManager::IModeChangedNotification>());
+            LOGINFO("CryptographyExtAccess unregistered PowerManager mode change handler");
+        }
+    }
+
+    void CryptographyExtAccess::onPowerModeChanged(const PowerState currentState, const PowerState newState)
+    {
+        LOGINFO("CryptographyExtAccess::onPowerModeChanged: Old State %d, New State: %d", static_cast<int>(currentState), static_cast<int>(newState));
+
+        if (newState == WPEFramework::Exchange::IPowerManager::POWER_STATE_STANDBY_DEEP_SLEEP) {
+            std::lock_guard<std::mutex> lock(_implMutex);
+            if (!_inDeepSleep) {
+                LOGINFO("Releasing SecAPI handle before deep sleep");
+                destroyImplementation();
+                _inDeepSleep = true;
+            }
+        } else if (_inDeepSleep) {
+            std::lock_guard<std::mutex> lock(_implMutex);
+            if (_inDeepSleep) {
+                LOGINFO("Re-acquiring SecAPI handle after deep sleep");
+                if (!createImplementation()) {
+                    LOGERR("CryptographyExtAccess could not re-create implementation after deep sleep");
+                }
+                _inDeepSleep = false;
+            }
         }
     }
 } // namespace Plugin
