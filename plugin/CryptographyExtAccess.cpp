@@ -76,6 +76,13 @@ namespace Plugin {
 
             _service->Unregister(&_notification);
 
+            // Serialize teardown with any in-flight onPowerModeChanged().
+            // unregisterPowerEventHandlers() stops new notifications but
+            // does not wait for ones already mid-flight, which could
+            // otherwise race destroyImplementation() or use _service
+            // after we release it.
+            std::lock_guard<std::mutex> lock(_implMutex);
+
             destroyImplementation();
 
             _connectionId = 0;
@@ -191,10 +198,14 @@ namespace Plugin {
             }
         } else if (_inDeepSleep) {
             LOGINFO("Re-acquiring SecAPI handle after deep sleep");
-            if (!createImplementation()) {
-                LOGERR("CryptographyExtAccess could not re-create implementation after deep sleep");
+            if (createImplementation()) {
+                _inDeepSleep = false;
+            } else {
+                // Keep the flag set so the next non-deep-sleep transition
+                // retries createImplementation() naturally, rather than
+                // clearing state and waiting for a full sleep+wake cycle.
+                LOGERR("CryptographyExtAccess could not re-create implementation after deep sleep; will retry on next wake transition");
             }
-            _inDeepSleep = false;
         }
     }
 } // namespace Plugin
