@@ -27,12 +27,13 @@
 
 #include <mutex>
 
-using PowerState = WPEFramework::Exchange::IPowerManager::PowerState;
-
 namespace WPEFramework {
 namespace Plugin {
 
     class CryptographyExtAccess : public PluginHost::IPlugin {
+    private:
+        using PowerState = Exchange::IPowerManager::PowerState;
+
     private:
         class PowerManagerNotification : public Exchange::IPowerManager::IModeChangedNotification {
         private:
