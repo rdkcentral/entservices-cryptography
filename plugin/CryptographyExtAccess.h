@@ -26,6 +26,7 @@
 #include "PowerManagerInterface.h"
 
 #include <mutex>
+#include <type_traits>
 
 namespace WPEFramework {
 namespace Plugin {

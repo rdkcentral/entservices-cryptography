@@ -122,13 +122,14 @@ namespace Plugin {
     {
         if (_implementation != nullptr) {
 
-            RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
-            LOGINFO("CryptographyExtAccess - Remote Connection - %p", connection);
-
             VARIABLE_IS_NOT_USED uint32_t result = _implementation->Release();
             _implementation = nullptr;
             ASSERT(result == Core::ERROR_DESTRUCTION_SUCCEEDED);
 
+            // Query after Release so a non-null result means the remote
+            // genuinely failed to tear down (true error case), instead of
+            // tripping on every clean teardown including deep-sleep entry.
+            RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
             if (connection != nullptr) {
                 TRACE(Trace::Error, (_T("CryptographyExtAccess is not properly destructed. %d"), _connectionId));
 
@@ -179,8 +180,9 @@ namespace Plugin {
     {
         LOGINFO("CryptographyExtAccess::onPowerModeChanged: Old State %d, New State: %d", static_cast<int>(currentState), static_cast<int>(newState));
 
+        std::lock_guard<std::mutex> lock(_implMutex);
+
         if (newState == WPEFramework::Exchange::IPowerManager::POWER_STATE_STANDBY_DEEP_SLEEP) {
-            std::lock_guard<std::mutex> lock(_implMutex);
             if (!_inDeepSleep) {
                 LOGINFO("Releasing SecAPI handle before deep sleep");
                 vault_processor_release();
@@ -188,14 +190,11 @@ namespace Plugin {
                 _inDeepSleep = true;
             }
         } else if (_inDeepSleep) {
-            std::lock_guard<std::mutex> lock(_implMutex);
-            if (_inDeepSleep) {
-                LOGINFO("Re-acquiring SecAPI handle after deep sleep");
-                if (!createImplementation()) {
-                    LOGERR("CryptographyExtAccess could not re-create implementation after deep sleep");
-                }
-                _inDeepSleep = false;
+            LOGINFO("Re-acquiring SecAPI handle after deep sleep");
+            if (!createImplementation()) {
+                LOGERR("CryptographyExtAccess could not re-create implementation after deep sleep");
             }
+            _inDeepSleep = false;
         }
     }
 } // namespace Plugin
