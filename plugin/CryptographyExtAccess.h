@@ -25,6 +25,7 @@
 #include <interfaces/IPowerManager.h>
 #include "PowerManagerInterface.h"
 
+#include <atomic>
 #include <mutex>
 #include <type_traits>
 
@@ -145,7 +146,7 @@ POP_WARNING()
         PowerManagerInterfaceRef _powerManagerPlugin;
         Core::Sink<PowerManagerNotification> _pwrMgrNotification;
         std::mutex _implMutex;
-        bool _inDeepSleep;
+        std::atomic<bool> _inDeepSleep;
         bool _registeredPowerEventHandlers;
     };
 

@@ -197,9 +197,13 @@ namespace Plugin {
         if (newState == WPEFramework::Exchange::IPowerManager::POWER_STATE_STANDBY_DEEP_SLEEP) {
             if (!_inDeepSleep) {
                 LOGINFO("Releasing SecAPI handle before deep sleep");
+                // Set the flag before tearing down so Deactivated(), which
+                // can fire on a worker thread when destroyImplementation()
+                // drops the remote connection, observes _inDeepSleep == true
+                // and skips the FAILURE submission.
+                _inDeepSleep = true;
                 vault_processor_release();
                 destroyImplementation();
-                _inDeepSleep = true;
             }
         } else if (_inDeepSleep) {
             LOGINFO("Re-acquiring SecAPI handle after deep sleep");
