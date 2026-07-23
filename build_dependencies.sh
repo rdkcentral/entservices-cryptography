@@ -45,9 +45,9 @@ cd ..
 # Clone the required repositories
 
 
-git clone --branch  R4.4.3 https://github.com/rdkcentral/ThunderTools.git
+git clone --branch  R4.4.6 https://github.com/rdkcentral/ThunderTools.git
 
-git clone --branch R4.4.1 https://github.com/rdkcentral/Thunder.git
+git clone --branch R4.4.6 https://github.com/rdkcentral/Thunder.git
 
 git clone --branch main https://github.com/rdkcentral/entservices-apis.git
 
@@ -112,7 +112,7 @@ cmake --build build/entservices-apis --target install
 
 #############################
 # Build Thunder Client Libraries
-git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderClientLibraries.git
+git clone --branch R4.4.6 https://github.com/rdkcentral/ThunderClientLibraries.git
 cmake -G Ninja -S ThunderClientLibraries -B build/ThunderClientLibraries \
     -DCRYPTOGRAPHY=ON \
     -DCRYPTOGRAPHY_IMPLEMENTATION="OpenSSL" \
