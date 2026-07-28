@@ -110,7 +110,7 @@ cmake --build build/entservices-apis --target install
 
 #############################
 # Build Thunder Client Libraries
-git clone --branch R4_4 https://github.com/rdkcentral/ThunderClientLibraries.git
+git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderClientLibraries.git
 cmake -G Ninja -S ThunderClientLibraries -B build/ThunderClientLibraries \
     -DCRYPTOGRAPHY=ON \
     -DCRYPTOGRAPHY_IMPLEMENTATION="OpenSSL" \
