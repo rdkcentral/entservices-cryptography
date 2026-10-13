@@ -105,9 +105,12 @@ namespace Plugin {
         if (_inDeepSleep) {
             return;
         }
-        if (connection->Id() == _connectionId) {
 
-            ASSERT(_service != nullptr);
+        // _service/_connectionId are mutated under _implMutex in Deinitialize(),
+        // so they must be read under the same lock here to avoid a torn/stale view.
+        std::lock_guard<std::mutex> lock(_implMutex);
+
+        if ((_service != nullptr) && (connection->Id() == _connectionId)) {
 
             Core::IWorkerPool::Instance().Submit(PluginHost::IShell::Job::Create(_service,
                 PluginHost::IShell::DEACTIVATED,
