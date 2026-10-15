@@ -24,7 +24,7 @@ extern "C" {
     void vault_processor_release(void);
 }
 
-namespace WPEFramework {
+namespace Thunder {
 namespace Plugin {
 
     namespace {
@@ -194,7 +194,7 @@ namespace Plugin {
 
         std::lock_guard<std::mutex> lock(_implMutex);
 
-        if (newState == WPEFramework::Exchange::IPowerManager::POWER_STATE_STANDBY_DEEP_SLEEP) {
+        if (newState == Thunder::Exchange::IPowerManager::POWER_STATE_STANDBY_DEEP_SLEEP) {
             if (!_inDeepSleep) {
                 LOGINFO("Releasing SecAPI handle before deep sleep");
                 // Set the flag before tearing down so Deactivated(), which
@@ -218,4 +218,4 @@ namespace Plugin {
         }
     }
 } // namespace Plugin
-} // namespace WPEFramework
+} // namespace Thunder

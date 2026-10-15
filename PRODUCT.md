@@ -2,7 +2,7 @@
 
 ## Product Overview
 
-The Cryptography plugin is a secure, enterprise-grade cryptographic service for RDK (Reference Design Kit) devices powered by WPEFramework (Thunder). It provides applications with a standardized interface for performing cryptographic operations including encryption, decryption, hashing, digital signatures, and secure key management. The plugin is designed for embedded systems and set-top boxes requiring robust security capabilities.
+The Cryptography plugin is a secure, enterprise-grade cryptographic service for RDK (Reference Design Kit) devices powered by Thunder. It provides applications with a standardized interface for performing cryptographic operations including encryption, decryption, hashing, digital signatures, and secure key management. The plugin is designed for embedded systems and set-top boxes requiring robust security capabilities.
 
 ## Key Features
 
@@ -23,7 +23,7 @@ The Cryptography plugin is a secure, enterprise-grade cryptographic service for 
 
 ### Integration and Compatibility
 
-- **WPEFramework Native**: First-class citizen in the Thunder plugin ecosystem
+- **Thunder Native**: First-class citizen in the Thunder plugin ecosystem
 - **Standard Interfaces**: Uses Thunder's ICryptography interface for compatibility
 - **RPC-Based Access**: Remote procedure call architecture for flexibility
 - **Configurable Deployment**: Supports multiple process modes (in-process, out-of-process)
@@ -197,7 +197,7 @@ Runtime behavior customizable through:
 ### System Requirements
 
 - **Operating System**: Linux-based RDK platform
-- **WPEFramework**: Thunder R4.4+ recommended
+- **Thunder**: Thunder R4.4+ recommended
 - **Dependencies**: Thunder Cryptography library, RPC framework
 - **Permissions**: Root access required for initial setup
 

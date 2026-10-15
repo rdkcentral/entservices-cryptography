@@ -26,7 +26,7 @@
 #define CONNECTOR_PATH "/tmp/icryptography"
 #define APPS_GROUP_NAME "apps"
 
-namespace WPEFramework {
+namespace Thunder {
 
 namespace Plugin {
     class CryptographyImplementation : virtual public Exchange::IConfiguration {
@@ -170,4 +170,4 @@ namespace Plugin {
 
     SERVICE_REGISTRATION(CryptographyImplementation, 1, 0);
 }
-} /* namespace WPEFramework::Plugin */
+} /* namespace Thunder::Plugin */

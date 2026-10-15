@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure cryptographic operations through an external access interface. It enables applications to perform cryptographic functions such as encryption, decryption, hashing, and secure key management in a controlled and isolated environment.
+The Cryptography plugin is a Thunder plugin that provides secure cryptographic operations through an external access interface. It enables applications to perform cryptographic functions such as encryption, decryption, hashing, and secure key management in a controlled and isolated environment.
 
 ## System Architecture
 
@@ -10,7 +10,7 @@ The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure 
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│           WPEFramework (Thunder) Core                   │
+│               Thunder Core                              │
 └────────────────────┬────────────────────────────────────┘
                      │
          ┌───────────▼───────────┐
@@ -37,7 +37,7 @@ The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure 
 
 ### 1. CryptographyExtAccess (Plugin Interface)
 
-**Purpose**: Main plugin entry point that manages the plugin lifecycle within WPEFramework.
+**Purpose**: Main plugin entry point that manages the plugin lifecycle within Thunder.
 
 **Key Responsibilities**:
 - Plugin initialization and deinitialization
@@ -68,7 +68,7 @@ The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure 
 **Configuration**:
 - Connector path: `/tmp/icryptography` (UNIX domain socket)
 - Access control: Configured for "apps" group with read/write permissions
-- Uses WPEFramework's configuration system for runtime settings
+- Uses Thunder's configuration system for runtime settings
 
 ### 3. ExternalAccess (RPC Layer)
 
@@ -89,7 +89,7 @@ The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure 
 
 ### Plugin Initialization Flow
 
-1. WPEFramework loads CryptographyExtAccess plugin
+1. Thunder loads CryptographyExtAccess plugin
 2. `Initialize()` called with plugin configuration
 3. Plugin registers connection notification handlers
 4. Creates RPC connection to CryptographyImplementation
@@ -119,7 +119,7 @@ The Cryptography plugin is a WPEFramework (Thunder) plugin that provides secure 
 
 ### Build System Integration
 
-- Uses CMake with WPEFramework package discovery
+- Uses CMake with Thunder package discovery
 - Links against Thunder core libraries:
   - `${NAMESPACE}Plugins`: Plugin infrastructure
   - `${NAMESPACE}Definitions`: Common definitions
@@ -137,7 +137,7 @@ Plugin configuration managed through JSON configuration file:
 
 ### Process Isolation
 
-The plugin runs as a separate process from the main WPEFramework core, providing:
+The plugin runs as a separate process from the main Thunder core, providing:
 - Memory isolation between cryptographic operations and main framework
 - Crash isolation - crypto process failures don't affect main system
 - Enhanced security boundary for sensitive operations
@@ -160,8 +160,8 @@ The plugin runs as a separate process from the main WPEFramework core, providing
 
 ### Core Dependencies
 
-- **WPEFramework Core**: Thunder plugin infrastructure
-- **WPEFramework Cryptography**: Core cryptography library implementation
+- **Thunder Core**: Thunder plugin infrastructure
+- **Thunder Cryptography**: Core cryptography library implementation
 - **RPC Framework**: Thunder's remote procedure call system
 - **CompileSettingsDebug**: Debug compilation settings
 

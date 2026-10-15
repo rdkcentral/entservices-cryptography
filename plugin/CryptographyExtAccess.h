@@ -29,7 +29,7 @@
 #include <mutex>
 #include <type_traits>
 
-namespace WPEFramework {
+namespace Thunder {
 namespace Plugin {
 
     class CryptographyExtAccess : public PluginHost::IPlugin {
