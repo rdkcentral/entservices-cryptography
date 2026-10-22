@@ -51,6 +51,8 @@ cmake -G Ninja -S "$GITHUB_WORKSPACE" -B build/entservices-cryptography \
 -I ${GITHUB_WORKSPACE}/entservices-testframework/Tests/headers/network \
 -I ${GITHUB_WORKSPACE}/entservices-testframework/Tests/mocks \
 -I ${GITHUB_WORKSPACE}/entservices-testframework/Tests/mocks/thunder \
+-I ${GITHUB_WORKSPACE}/install/usr/include \
+-I ${GITHUB_WORKSPACE}/install/usr/include/WPEFramework \
 -I /usr/include/libdrm \
 -include ${GITHUB_WORKSPACE}/entservices-testframework/Tests/mocks/Iarm.h \
 -include ${GITHUB_WORKSPACE}/entservices-testframework/Tests/mocks/Rfc.h \

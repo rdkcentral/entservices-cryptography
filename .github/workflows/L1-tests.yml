@@ -187,6 +187,12 @@ jobs:
           ref: ${{env.INTERFACES_REF}}
       - name: Remove unused DTV API definition
         run: rm -f "$GITHUB_WORKSPACE/entservices-apis/jsonrpc/DTV.json"
+
+      - name: Apply patches entservices-apis
+        run: |
+          cd $GITHUB_WORKSPACE/entservices-apis
+          patch -p1 < $GITHUB_WORKSPACE/entservices-testframework/patches/RDKEMW-1007.patch
+          cd -
           
       - name: Build entservices-apis
         run: >
