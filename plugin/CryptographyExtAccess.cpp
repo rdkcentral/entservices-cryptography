@@ -68,6 +68,7 @@ namespace Plugin {
 
     void CryptographyExtAccess::Deinitialize(PluginHost::IShell* service)  /* override */
     {
+        std::lock_guard<std::mutex> lock(_implMutex);
         if (_service != nullptr) {
             ASSERT(_service == service);
 
@@ -81,7 +82,6 @@ namespace Plugin {
             // does not wait for ones already mid-flight, which could
             // otherwise race destroyImplementation() or use _service
             // after we release it.
-            std::lock_guard<std::mutex> lock(_implMutex);
 
             destroyImplementation();
 
