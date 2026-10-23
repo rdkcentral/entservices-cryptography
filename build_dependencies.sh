@@ -57,9 +57,9 @@ cd Thunder
 git checkout $THUNDER_COMMIT_SHA
 cd ..
 
-git clone --branch main https://github.com/rdkcentral/entservices-apis.git
+git clone --branch develop https://github.com/rdkcentral/entservices-apis.git
 
-git clone --branch 2.0.0 https://github.com/rdkcentral/entservices-testframework.git
+git clone --branch feature/RDKEMW-25013 https://github.com/rdkcentral/entservices-testframework.git
 
 ############################
 # Build Thunder-Tools
@@ -116,6 +116,8 @@ cmake --build build/entservices-apis --target install
 #############################
 # Build Thunder Client Libraries
 git clone --branch R4.4.1 https://github.com/rdkcentral/ThunderClientLibraries.git
+git -C ThunderClientLibraries fetch origin 975005f5371c2e439cdf3b46162c6938f441ed2b
+git -C ThunderClientLibraries checkout 975005f5371c2e439cdf3b46162c6938f441ed2b -- Source/cryptography/NetflixSecurity.cpp
 cmake -G Ninja -S ThunderClientLibraries -B build/ThunderClientLibraries \
     -DCRYPTOGRAPHY=ON \
     -DCRYPTOGRAPHY_IMPLEMENTATION="OpenSSL" \
