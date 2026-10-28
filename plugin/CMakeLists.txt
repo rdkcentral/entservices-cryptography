@@ -47,7 +47,15 @@ endif()
 find_package(${NAMESPACE}Plugins REQUIRED)
 find_package(${NAMESPACE}Definitions REQUIRED)
 find_package(CompileSettingsDebug CONFIG REQUIRED)
-find_package(${NAMESPACE}Cryptography CONFIG REQUIRED)
+
+# Thunder 5 ships the cryptography client library as ClientCryptography.
+find_package(ClientCryptography CONFIG QUIET)
+if(ClientCryptography_FOUND)
+    set(CRYPTOGRAPHY_LIBRARY ClientCryptography::ClientCryptography)
+else()
+    find_package(${NAMESPACE}Cryptography CONFIG REQUIRED)
+    set(CRYPTOGRAPHY_LIBRARY ${NAMESPACE}Cryptography::${NAMESPACE}Cryptography)
+endif()
 
 add_library(${MODULE_NAME} SHARED
     Module.cpp
@@ -69,7 +77,7 @@ target_link_libraries(${MODULE_NAME}
         CompileSettingsDebug::CompileSettingsDebug
         ${NAMESPACE}Plugins::${NAMESPACE}Plugins
         ${NAMESPACE}Definitions::${NAMESPACE}Definitions
-        ${NAMESPACE}Cryptography::${NAMESPACE}Cryptography
+        ${CRYPTOGRAPHY_LIBRARY}
 )
 
 install(TARGETS ${MODULE_NAME}
