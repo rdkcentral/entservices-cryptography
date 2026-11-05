@@ -40,6 +40,7 @@ find_package(${NAMESPACE}Plugins REQUIRED)
 find_package(${NAMESPACE}Definitions REQUIRED)
 find_package(CompileSettingsDebug CONFIG REQUIRED)
 find_package(${NAMESPACE}Cryptography CONFIG REQUIRED)
+find_package(${NAMESPACE}Helpers CONFIG REQUIRED)
 
 add_library(${MODULE_NAME} SHARED
     Module.cpp
@@ -62,6 +63,7 @@ target_link_libraries(${MODULE_NAME}
         ${NAMESPACE}Plugins::${NAMESPACE}Plugins
         ${NAMESPACE}Definitions::${NAMESPACE}Definitions
         ${NAMESPACE}Cryptography::${NAMESPACE}Cryptography
+        ${NAMESPACE}::${NAMESPACE}Helpers
 )
 
 install(TARGETS ${MODULE_NAME}
