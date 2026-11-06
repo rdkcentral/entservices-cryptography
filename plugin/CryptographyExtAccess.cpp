@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+
 #include "CryptographyExtAccess.h"
 #include "UtilsLogging.h"
 
@@ -65,6 +66,7 @@ namespace Plugin {
 
         return message;
     }
+
 
     void CryptographyExtAccess::Deinitialize(PluginHost::IShell* service)  /* override */
     {
