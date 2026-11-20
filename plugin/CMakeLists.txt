@@ -47,6 +47,7 @@ endif()
 find_package(${NAMESPACE}Plugins REQUIRED)
 find_package(${NAMESPACE}Definitions REQUIRED)
 find_package(CompileSettingsDebug CONFIG REQUIRED)
+find_package(${NAMESPACE}Helpers CONFIG REQUIRED)
 
 # Thunder 5 ships the cryptography client library as ClientCryptography.
 find_package(ClientCryptography CONFIG QUIET)
@@ -67,14 +68,10 @@ set_target_properties(${MODULE_NAME} PROPERTIES
         CXX_STANDARD 11
         CXX_STANDARD_REQUIRED YES)
 
-target_include_directories(${MODULE_NAME}
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/helpers
-)
-
 target_link_libraries(${MODULE_NAME}
     PRIVATE
         CompileSettingsDebug::CompileSettingsDebug
+        ${NAMESPACE}::${NAMESPACE}Helpers
         ${NAMESPACE}Plugins::${NAMESPACE}Plugins
         ${NAMESPACE}Definitions::${NAMESPACE}Definitions
         ${CRYPTOGRAPHY_LIBRARY}
